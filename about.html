@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About · Disease Prediction System</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ============================ NAVIGATION ============================ -->
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="index.html" class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3v18M3 12h18" stroke-linecap="round"/>
+          </svg>
+        </span>
+        Disease Prediction System
+      </a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="prediction.html">Prediction</a></li>
+        <li><a href="history.html">History</a></li>
+        <li><a href="analytics.html">Analytics</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="section" style="padding-top:40px;">
+    <div class="container">
+
+      <div class="section-heading">
+        <h2>About this project</h2>
+        <p>
+          Disease Prediction System is a college minor project that
+          demonstrates how a browser-only web application can take
+          structured user input, run it through a rule-based scoring
+          model, and present a helpful, explainable result — all without a
+          server, API, or database.
+        </p>
+      </div>
+
+      <h3>Why it exists</h3>
+      <p>
+        Many real-world symptom checkers are opaque "black boxes." This
+        project takes the opposite approach: the entire dataset and scoring
+        logic are visible, readable JavaScript, making it a good teaching
+        example of how a simple recommendation/classification system is
+        structured — from data modelling to UI to persistence.
+      </p>
+
+      <h3 style="margin-top:36px;">How the "machine learning" style prediction works</h3>
+      <p>
+        The app does not use a trained neural network or an external ML
+        library. Instead, it uses a transparent <strong>weighted
+        symptom-matching algorithm</strong>, which mimics how a simple
+        classifier would score candidates:
+      </p>
+      <ol class="workflow-steps">
+        <li>
+          <span class="workflow-num">01</span>
+          <div><p><strong>Feature encoding.</strong> Each symptom the user selects becomes a "feature" — similar to how a real ML model encodes categorical input.</p></div>
+        </li>
+        <li>
+          <span class="workflow-num">02</span>
+          <div><p><strong>Weighted scoring.</strong> Every disease in <code>data/diseases.js</code> stores its typical symptoms with a weight (0.1–1.0) reflecting how defining that symptom is.</p></div>
+        </li>
+        <li>
+          <span class="workflow-num">03</span>
+          <div><p><strong>Coverage &amp; noise penalty.</strong> The app calculates how much of each disease's weighted symptom profile the user's selection covers (scaled so diseases with short and long symptom lists compete fairly), then slightly penalises unrelated symptom picks.</p></div>
+        </li>
+        <li>
+          <span class="workflow-num">04</span>
+          <div><p><strong>Ranking.</strong> All conditions are ranked by their final score. The top match is shown with its score as a "match score" percentage, along with up to two runner-ups. This is a measure of fit, not a probability. Symptoms such as chest tightness or shortness of breath also trigger a separate warning notice, whatever the prediction is.</p></div>
+        </li>
+      </ol>
+      <p style="margin-top:14px;">
+        Because the model lives in a single, isolated <code>Predictor</code>
+        object (see <code>js/prediction.js</code>), it can later be replaced
+        with a real trained ML model — for example one exported from
+        scikit-learn to a JSON/ONNX format, or called via an external API —
+        without changing any UI code.
+      </p>
+
+      <h3 style="margin-top:36px;">Why localStorage instead of a database</h3>
+      <p>
+        This is a front-end-only demo, so there's no backend to talk to. The
+        browser's built-in <code>localStorage</code> acts as a lightweight,
+        zero-setup substitute for a database: every prediction you run is
+        saved as a JSON record under the key
+        <code>diseasePredictionHistory</code>, directly in your browser.
+        Nothing is uploaded anywhere, and clearing your browser data will
+        also clear your history.
+      </p>
+
+      <h3 style="margin-top:36px;">Technologies used</h3>
+      <div class="tech-tags">
+        <span class="tech-tag">HTML5</span>
+        <span class="tech-tag">CSS3</span>
+        <span class="tech-tag">Vanilla JavaScript (ES6)</span>
+        <span class="tech-tag">Browser localStorage API</span>
+        <span class="tech-tag">No frameworks</span>
+        <span class="tech-tag">No backend</span>
+      </div>
+
+      <div class="disclaimer-banner" style="margin-top:40px;">
+        <span class="icon" aria-hidden="true">!</span>
+        <p>
+          <strong>Medical disclaimer.</strong> This application is created
+          strictly for educational and academic demonstration purposes. It
+          uses a small, illustrative sample dataset and a simplified
+          heuristic algorithm — it is <strong>not</strong> a certified
+          medical device, does not provide medical diagnoses, and must not
+          be used to make real healthcare decisions. It does not prescribe
+          medication or personalised treatment. If you have genuine health
+          concerns, please consult a qualified healthcare professional.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Disease Prediction System — a client-side educational project. No data leaves your browser.</p>
+    </div>
+  </footer>
+
+  <script src="data/diseases.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
